@@ -1,45 +1,26 @@
 # HashiCorp Vault on GKE with Terraform
 
-This tutorial walks through provisioning a highly-available [HashiCorp
-Vault][vault] cluster on [Google Kubernetes Engine][gke] using [HashiCorp
-Terraform][terraform] as the provisioning tool.
-
-This tutorial is based on [Kelsey Hightower's Vault on Google Kubernetes
-Engine][kelseys-tutorial], but focuses on codifying the steps in Terraform
-instead of teaching you them individually. If you would like to know how to
-provision HashiCorp Vault on Kuberenetes step-by-step (aka "the hard way"),
-please follow Kelsey's repository instead.
-
-**These configurations require Terraform 0.12+!** For support with Terraform
-0.11, please use the git tag v0.1.2 series.
-
-
 ## Feature Highlights
 
-- **Vault HA** - The Vault cluster is deployed in HA mode backed by [Google
-  Cloud Storage][gcs]
-
+- GCP infrastructure is coded in Terraform and the Kubernetes commands are entered manually in the gcloud or user interface. 
+- Vault is deployed in HA mode backed by Google Cloud Storage
+- Regional GKE cluster with a single node per availability zone of the type n1-standard-1 is used
+- Kubectl access is restricted to datacenter IP range
+- StatefulSet of 2 replicas each containing valut-init and vault images are deployed in each node
+- User access to Vault is opened through publicaly accessible Load balancer but restrcited to datacenter IP range
+- The vault-init container runs every 10 seconds and ensures each vault instance is automatically unsealed. The unseal keys are encrypted with Google Cloud KMS and stored in Google Cloud Storage
+- Audit logging is enabled to Stackdriver
+- A readiness probe by the StatefulSet is used to ensure Vault instances are not routed traffic when they are sealed
 - **Production Hardened** - Vault is deployed according to the [production
   hardening
   guide](https://www.vaultproject.io/guides/operations/production.html). Please
   see the [security section](#security) for more information.
-
-- **Auto-Init and Unseal** - Vault is automatically initialized and unsealed
-  at runtime. The unseal keys are encrypted with [Google Cloud KMS][kms] and
-  stored in [Google Cloud Storage][gcs]
-
-- **Full Isolation** - The Vault cluster is provisioned in it's own Kubernetes
-  cluster in a dedicated GCP project that is provisioned dynamically at
-  runtime. Clients connect to Vault using **only** the load balancer and Vault
-  is treated as a managed external service.
-
-- **Audit Logging** - Audit logging to Stackdriver can be optionally enabled
-  with minimal additional configuration.
-
-
+  
 ## Tutorial
 
-1. Download and install [Terraform][terraform].
+1. Download and install Terraform
+
+2. Download and install 
 
 1. Download, install, and configure the [Google Cloud SDK][sdk]. You will need
    to configure your default application credentials so Terraform can run. It
@@ -73,6 +54,13 @@ please follow Kelsey's repository instead.
     1. Creates a Kubernetes secret with the TLS file contents
     1. Configures your local system to talk to the GKE cluster by getting the cluster credentials and kubernetes context
     1. Submits the StatefulSet and Service to the Kubernetes API
+
+References:
+1. [Kelsey Hightower's Vault on Google Kubernetes
+Engine][kelseys-tutorial]
+2. https://github.com/sethvargo/vault-on-gke
+
+
 
 
 ## Interact with Vault
