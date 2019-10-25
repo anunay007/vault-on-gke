@@ -20,6 +20,18 @@
 
 1. Download and install Terraform
 
+2. Download and install gcloud on your interface
+
+3. Download and install vault CLI - https://releases.hashicorp.com/vault/1.2.3/
+
+4. Download and install the kubectl cli
+
+3. Authneticate to Google account with - gcloud auth login
+  
+4. Set project with - gcloud config set project <project-id>
+  
+5. 
+
 2. Download and install 
 
 1. Download, install, and configure the [Google Cloud SDK][sdk]. You will need
