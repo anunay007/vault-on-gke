@@ -9,27 +9,26 @@ provider "google-beta" {
   project = var.project
 }
 
-# Generate a random id for the project - GCP projects must have globally
-# unique names
-resource "random_id" "project_random" {
-  prefix      = var.project_prefix
-  byte_length = "8"
-}
-
-# Create the project if one isn't specified
-resource "google_project" "vault" {
-  count           = var.project != "" ? 0 : 1
-  name            = random_id.project_random.hex
-  project_id      = random_id.project_random.hex
-  org_id          = var.org_id
-  billing_account = var.billing_account
-}
-
-# Or use an existing project, if defined
+# Use the project that has been defined
 data "google_project" "vault" {
-  count      = var.project != "" ? 1 : 0
   project_id = var.project
 }
+
+# Generate a random id for the project - GCP projects must have globally
+# unique names
+#resource "random_id" "project_random" {
+#  prefix      = var.project_prefix
+#  byte_length = "8"
+#}
+
+# Create the project if one isn't specified
+#resource "google_project" "vault" {
+#  count           = var.project != "" ? 0 : 1
+#  name            = random_id.project_random.hex
+#  project_id      = random_id.project_random.hex
+#  org_id          = var.org_id
+#  billing_account = var.billing_account
+#}
 
 # Obtain the project_id from either the newly created project resource or
 # existing data project resource One will be populated and the other will be
