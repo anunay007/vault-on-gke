@@ -4,35 +4,35 @@ terraform {
 
 variable "region" {
   type        = string
-  default     = "us-east4"
-  description = "Region in which to create the cluster and run Atlantis."
+  default     = "us-west2"
+  description = "Region in which to create the cluster"
 }
 
 variable "project" {
   type        = string
-  default     = ""
-  description = "Project ID where Terraform is authenticated to run to create additional projects. If provided, Terraform will great the GKE and Vault cluster inside this project. If not given, Terraform will generate a new project."
+  default     = "project-vault-256618"
+  description = "Project ID where Terraform is authenticated to run to create additional projects. Terraform will create the GKE and Vault cluster inside this project."
 }
 
-variable "project_prefix" {
-  type        = string
-  default     = "vault-"
-  description = "String value to prefix the generated project ID with."
-}
+#variable "project_prefix" {
+#  type        = string
+#  default     = "vault-"
+#  description = "String value to prefix the generated project ID with."
+#}
 
-variable "billing_account" {
-  type        = string
-  description = "Billing account ID."
-}
+#variable "billing_account" {
+#  type        = string
+#  description = "Billing account ID."
+#}
 
-variable "org_id" {
-  type        = string
-  description = "Organization ID."
-}
+#variable "org_id" {
+#  type        = string
+#  description = "Organization ID."
+#}
 
 variable "kubernetes_instance_type" {
   type        = string
-  default     = "n1-standard-2"
+  default     = "n1-standard-1"
   description = "Instance type to use for the nodes."
 }
 
